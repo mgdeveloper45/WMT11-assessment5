@@ -23,7 +23,7 @@ module.exports = {
                 country_id integer not null references countries (country_id)
             );
 
-            insert into countries (name)
+            insert into countries (country_name)
             values ('Afghanistan'),
             ('Albania'),
             ('Algeria'),
@@ -221,7 +221,7 @@ module.exports = {
             ('Zimbabwe');
         `).then(() => {
             console.log('DB seeded!')
-            res.sendStatus(200)
+            res.status(200).end()
         }).catch(err => console.log('error seeding DB', err))
     },
     getCountries: (req, res) => {
@@ -232,13 +232,8 @@ module.exports = {
     createCity: (req, res) => {
         const { city_name, rating, country_id } = req.body
         sequelize.query(`
-            insert into cities('${city_name}', ${rating}, ${country_id})
-            values ('Austin', 5, 187),
-                ('London', 3, 186), 
-                ('Puebla', 4, 111), 
-                ('Toronto', 2, 33),
-                ('Cairo', 5, 52),
-                ('Auckland', 4, 124)
+            insert into cities(city_name, rating, country_id)
+            values ('${city_name}', ${rating}, ${country_id})
         `)
         .then(dbRes => res.status(200).send(dbRes[0]))
         .catch(err => console.log(err))
@@ -258,7 +253,7 @@ module.exports = {
     deleteCity: (req, res) => {
         const { city_id } = req.params
         sequelize.query(`
-        delete from cities where cities.city_id = ${city_id}
+            delete from cities where cities.city_id = ${city_id}
         `)
         .then(dbRes => res.status(200).send(dbRes[0]))
         .catch(err => console.log(err))  
